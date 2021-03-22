@@ -11,6 +11,9 @@ use App\Notifications\MerchantApprovalNotification;
 use App\Notifications\MerchantDisapprovalNotification;
 use Illuminate\Database\Eloquent\Builder;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
+
 class AdminController extends Controller
 {
     public function index(){
@@ -25,11 +28,12 @@ class AdminController extends Controller
             }
         }
         $total_users = User::where('type','merchant')->get()->count();
+        $latest_user = User::with('stores')->where('type','merchant')->orderBy('created_at','desc')->get();
         $active_merchants = User::where('type','merchant')->where('approved',1)->get()->count();
 
         $stores = Store::with('user')->latest()->take(3)->get();
         $orders = Order::with(['deliveryInfo','store','user'])->latest()->take(3)->get();
-        return view('admin.dashboard',compact(['total_users','active_merchants','total_stores','active_stores','total_packages','total_order_completed','stores','orders']));
+        return view('admin.dashboard',compact(['total_users','latest_user','active_merchants','total_stores','active_stores','total_packages','total_order_completed','stores','orders']));
     }
 
     public function users(){

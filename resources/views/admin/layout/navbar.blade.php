@@ -3,7 +3,7 @@
         <ul class="flex-container">
             <li><a href="{{route('admin.dashboard')}}"><img src="{{asset('assets/photos/courier.PNG')}}" alt="courierService" style="width:160px; height:50px;"></a></li>
         <li><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
-            <li><a href="{{route('admin.users')}}">Users</a></li>
+            <li><a href="{{route('admin.users')}}">Users/Merchant</a></li>
         <li><a href="{{route('admin.store.index')}}">Stores</a></li>
         <li><a href="{{route('admin.order.index')}}">Orders</a></li>
         <li><a href="{{route('admin.package.index')}}">Packages</a></li>

@@ -59,7 +59,6 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    
     public function accountInfo(){
         return $this->hasOne('App\Models\MerchantAccountInfo');
     }

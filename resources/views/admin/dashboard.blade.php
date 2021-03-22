@@ -28,29 +28,37 @@
 </div>
 <div class="flex mt-25 text-center">
     <div class="col-6 bg-white mx-33">
-        <h3>Recent Orders</h3>
+        <h3 class="text-center">Recent Registered Merchant</h3>
         <table class="table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Store name</th>
-                    <th>Order Type</th>
                     <th>Merchant name</th>
-                    <th>Order Status</th>
+                    <th>Merchant store</th>
+                    <th>Merchant status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($orders as $order)
-                    <tr>
+                @foreach ($latest_user as $user)
+                    <tr class="text-center">
                         <td>{{++$loop->index}}</td>
-                        <td><p>{{$order->store->store_name}}</p></td>
-                        <td><p>{{$order->product_type}}</p></td>
-                        <td><p>{{$order->user->name}}</p></td>
+                        <td><p>{{$user->name}}</p></td>
+                        @if (count($user->stores))
+                            <td>
+                                @foreach ($user->stores as $store)
+                                    <p>{{$store->store_name}}</p>
+                                @endforeach
+                            </td>
+                        @else
+                            <td>
+                                <p>no stores</p>
+                            </td>
+                        @endif
                         <td>
-                            @if($order->deliveryInfo->delivery_status == 0)
-                            <a href=""><button class="border" style="color:white; background-color:red;">Pickup cancel</button></a>
+                            @if($user->approved== 0)
+                            <a href=""><button class="border" style="color:white; background-color:red;">Deactive</button></a>
                             @else
-                            <a href=""><button class="border" style="color:white; background-color:green;">Pickedup</button></a>
+                            <a href=""><button class="border" style="color:white; background-color:green;">Active</button></a>
                             @endif
                         </td>
                     </tr>
@@ -90,6 +98,37 @@
         </table>
     </div>
 </div>
+{{-- <div class="col-6 bg-white mx-33">
+    <h3>Recent Orders</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Store name</th>
+                <th>Order Type</th>
+                <th>Merchant name</th>
+                <th>Order Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($orders as $order)
+                <tr>
+                    <td>{{++$loop->index}}</td>
+                    <td><p>{{$order->store->store_name}}</p></td>
+                    <td><p>{{$order->product_type}}</p></td>
+                    <td><p>{{$order->user->name}}</p></td>
+                    <td>
+                        @if($order->deliveryInfo->delivery_status == 0)
+                        <a href=""><button class="border" style="color:white; background-color:red;">Pickup cancel</button></a>
+                        @else
+                        <a href=""><button class="border" style="color:white; background-color:green;">Pickedup</button></a>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div> --}}
 @endsection
 {{-- 
 @push('scripts')

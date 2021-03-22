@@ -69,7 +69,7 @@
                 </td>
                 <td class="text-center w-17">
                     @if($order->deliveryInfo->delivery_status == 0)
-                    <a href=""><button class="border" style="color:white; background-color:red;">Pickup cancel</button></a>
+                    <a href=""><button class="border" style="color:white; background-color:red;">Cancelled</button></a>
                     @else
                     <a href=""><button class="border" style="color:white; background-color:green;">Pickedup</button></a>
                     @endif
