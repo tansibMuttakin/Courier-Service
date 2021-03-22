@@ -58,6 +58,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
     Route::get('/order/edit/{orderId}', 'App\Http\Controllers\Admin\OrderController@edit')->name('admin.order.edit');
     Route::post('/order/update/{orderId}', 'App\Http\Controllers\Admin\OrderController@update')->name('admin.order.update');
     Route::get('/order/delete/{orderId}', 'App\Http\Controllers\Admin\OrderController@destroy')->name('admin.order.destroy');
+    
 
     
     Route::get('/getStore/{userId}', 'App\Http\Controllers\Admin\OrderController@getStore');
@@ -91,6 +92,7 @@ Route::group(['prefix' => 'merchant/order','middleware' => ['auth:sanctum', 'ver
     Route::get('/index', [OrderController::class, 'index'])->name('order.index');
     Route::get('/create', [OrderController::class, 'create'])->name('order.create');
     Route::post('/store', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/invoice/{orderId}', [OrderController::class, 'invoice'])->name('order.invoice');
 });
 
 

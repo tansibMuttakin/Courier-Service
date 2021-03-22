@@ -165,4 +165,9 @@ class OrderController extends Controller
         ->get();
         return response()->json($orders);
     }
+
+    public function invoice($orderId){
+        $order = Order::find($orderId)->first();
+        return view('merchant.order.invoice',['order' => $order]);
+    }
 }
