@@ -34,11 +34,14 @@ class LoginController extends Controller
             }
             return redirect()->route('dashboard');
         }
-        return redirect()->back()->with('status','credentials does not match with the data');
+        return redirect()->route('merchant.login')->with('status','credentials does not match with the data');
     }
     public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
         return redirect()->route('merchant.login');
     }
 }
