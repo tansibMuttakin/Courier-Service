@@ -1,11 +1,8 @@
 @extends('merchant.layout.master')
 @section('content')
 <div class="bg-white">
-    <div class="form-element">
-        <a href="{{route('order.invoice_pdf',$order->id)}}"><button>download pdf</button></a>
-    </div>
     <div class="flex-column form-element">
-        <h2 class="mb-40">Order Invoice #CMS{{$order->id}}</h2>
+        <h2 class="mb-40">Order ID #{{$order->id}}</h2>
         <br>
         <div id="account-info" class="flex-space-between cursor-pointer">
             <p class="sub-heading">Recipient Information</p>
@@ -35,6 +32,9 @@
             <p>Store Name:&nbsp; <b>{{$order->store->store_name}}</b></p>
             <p>Order type: &nbsp; <b>{{$order->product_type}}</b></p>
             <p>Order Quantity: &nbsp; <b>{{$order->deliveryInfo->quantity}}</b></p>
+            <p>Approximate Weight: &nbsp; <b>{{$order->deliveryInfo->total_wight}}</b></p>
+            <p>Order price & description: &nbsp; <b>{{$order->deliveryInfo->item_description_price}}</b></p>
+            <p>Delivery status:&nbsp; <b>{{$order->deliveryInfo->delivery_status ? 'Delivered' : 'Pending'}}</b></p>
         </div>
         <div id="payment-info" class="flex-space-between cursor-pointer">
             <p class="sub-heading">Payment Information</p>
@@ -51,6 +51,20 @@
             <p>Total Cost: &nbsp; <b>{{$order->deliveryInfo->cost_of_delivery+60}}</b></p>
             <p>Payment status:&nbsp; <b>{{$order->deliveryInfo->payment_status ? 'Paid' : 'Not Paid'}}</b></p>
         </div>
+        @if ($order->deliveryInfo->instruction)
+            <div class="flex-space-between cursor-pointer">
+                <p class="sub-heading">Instructions</p>
+                <div>
+                    <i class="fa fa-chevron-up"></i>
+                </div>
+            </div>
+            <div>
+                <hr>
+            </div>
+            <div>
+                <p><b>{{$order->deliveryInfo->instruction}}</b></p>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

@@ -48,6 +48,7 @@
                 <th>Delivery Status</th>
                 <th>Amount</th>
                 <th>Payment Status</th>
+                <th>View</th>
                 <th>Invoice</th>
             </tr>
         </thead>
@@ -81,6 +82,9 @@
                     @else
                     <a href=""><button class="border" style="color:white; background-color:green;">paid</button></a>
                     @endif
+                </td>
+                <td class="text-center cursor-pointer">
+                    <a href="{{route('order.view',$order->id)}}"><i class="fa fa-info" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" aria-hidden="true"></i></a>
                 </td>
                 <td class="text-center cursor-pointer">
                     <a href="{{route('order.invoice',$order->id)}}"><i class="fa fa-clone" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" aria-hidden="true"></i></a>

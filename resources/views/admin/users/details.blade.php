@@ -2,7 +2,7 @@
 @section('content')
 <div class="register-container">
     <div class="bg-white">  
-    <form action="{{route('admin.merchant.update',$user->id)}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('admin.merchant.update',$user->id)}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="flex-column form-element">
                 <h2 class="mb-40">Merchant Information</h2>

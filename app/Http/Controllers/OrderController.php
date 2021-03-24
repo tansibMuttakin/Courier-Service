@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Store;
 use App\Models\City;
 use App\Models\DeliveryInfo;
+use PDF;
 
 class OrderController extends Controller
 {
@@ -166,8 +167,19 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
+    public function view($orderId){
+        $order = Order::with(['user','store','deliveryInfo'])->where('id',$orderId)->first();
+        return view('merchant.order.view',['order' => $order]);
+    }
     public function invoice($orderId){
-        $order = Order::find($orderId)->first();
+        $order = Order::with(['user','store','deliveryInfo'])->where('id',$orderId)->first();
         return view('merchant.order.invoice',['order' => $order]);
+    }
+    public function pdf($orderId){
+        $order = Order::with(['user','store','deliveryInfo'])->where('id',$orderId)->first();
+        $pdf = PDF::loadView('merchant.order.invoiceForPdf',compact('order'));
+
+        // download PDF file with download method
+        return $pdf->download('invoice.pdf');
     }
 }

@@ -92,7 +92,9 @@ Route::group(['prefix' => 'merchant/order','middleware' => ['auth:sanctum', 'ver
     Route::get('/index', [OrderController::class, 'index'])->name('order.index');
     Route::get('/create', [OrderController::class, 'create'])->name('order.create');
     Route::post('/store', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/view/{orderId}', [OrderController::class, 'view'])->name('order.view');
     Route::get('/invoice/{orderId}', [OrderController::class, 'invoice'])->name('order.invoice');
+    Route::get('/pdf/{orderId}', [OrderController::class, 'pdf'])->name('order.invoice_pdf');
 });
 
 
