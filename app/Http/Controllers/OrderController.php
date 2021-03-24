@@ -9,6 +9,8 @@ use App\Models\Store;
 use App\Models\City;
 use App\Models\DeliveryInfo;
 use PDF;
+use Maatwebsite\Excel\Facades\CSV;
+use App\Exports\OrderExport;
 
 class OrderController extends Controller
 {
@@ -21,7 +23,6 @@ class OrderController extends Controller
     {
         $orders = Order::with(['store','deliveryInfo'])->where('user_id',auth()->id())->get();
         $stores = Store::where('user_id',auth()->id())->get();
-        // dd($orders);
         return view('merchant.order.index')->with('orders',$orders)->with('stores',$stores);
     }
 
@@ -175,11 +176,55 @@ class OrderController extends Controller
         $order = Order::with(['user','store','deliveryInfo'])->where('id',$orderId)->first();
         return view('merchant.order.invoice',['order' => $order]);
     }
+
+
+    // downloads whole models from database as xlsx file using maatwebsite
     public function pdf($orderId){
         $order = Order::with(['user','store','deliveryInfo'])->where('id',$orderId)->first();
         $pdf = PDF::loadView('merchant.order.invoiceForPdf',compact('order'));
 
         // download PDF file with download method
         return $pdf->download('invoice.pdf');
+    }
+
+    //downloads file as csv using fputcsv with custom columns
+    public function exportCsv(){
+
+        $fileName = 'orders_table.csv';
+        $orders = Order::with(['user','store','deliveryInfo'])->where('user_id',auth()->id())->get();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('order id', 'merchant id', 'type', 'store name', 'customer name', 'customer phone', 'amount'
+            , 'delivery status', 'payment status');
+
+        $callback = function() use($orders, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($orders as $order) {
+                $row['order id']  = $order->id;
+                $row['merchant id']    = $order->user->id;
+                $row['type']    = $order->product_type;
+                $row['store name']  = $order->store->store_name;
+                $row['customer name']  = $order->recipient_name;
+                $row['customer phone']  = $order->recipient_phone;
+                $row['amount']  = $order->deliveryInfo->cost_of_delivery;
+                $row['delivery status']  = $order->deliveryInfo->delivery_status;
+                $row['payment status']  = $order->deliveryInfo->payment_status;
+
+                fputcsv($file, array($row['order id'], $row['merchant id'], $row['type'], $row['store name'], $row['customer name']
+                ,$row['customer phone'],$row['amount'],$row['delivery status'],$row['payment status']));
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

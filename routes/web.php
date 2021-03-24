@@ -95,6 +95,7 @@ Route::group(['prefix' => 'merchant/order','middleware' => ['auth:sanctum', 'ver
     Route::get('/view/{orderId}', [OrderController::class, 'view'])->name('order.view');
     Route::get('/invoice/{orderId}', [OrderController::class, 'invoice'])->name('order.invoice');
     Route::get('/pdf/{orderId}', [OrderController::class, 'pdf'])->name('order.invoice_pdf');
+    Route::get('/csv', [OrderController::class, 'exportCsv'])->name('order.export');
 });
 
 

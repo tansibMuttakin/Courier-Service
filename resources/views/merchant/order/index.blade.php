@@ -33,7 +33,9 @@
             </select>
         </div>
         <div>
-            <a href=""><button  class="border" style="color:white;">Export CSV</button></a>
+            <a href="{{route('order.export')}}" id="export">
+                <button class="border" style="color:white;">Export CSV</button>
+            </a>
         </div>
     </div>
 </div>
@@ -460,7 +462,6 @@ $(document).ready(function(){
             // always executed
         });  
     });
-
 
 });
 
