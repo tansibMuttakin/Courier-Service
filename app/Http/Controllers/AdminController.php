@@ -42,6 +42,38 @@ class AdminController extends Controller
         return view('admin.users.index')->with('users',$users)->with('packages',$packages);
     }
 
+    public function exportCsv(){
+
+        $fileName = 'merchants_table.csv';
+        $users = User::where('type','merchant')->get();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('id', 'merchant name', 'email', 'is approved');
+
+        $callback = function() use($users, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($users as $user) {
+                $row['id']  = $user->id;
+                $row['merchant name']    = $user->name;
+                $row['email']    = $user->email;
+                $row['is approved']  = $user->approved;
+
+                fputcsv($file, array($row['id'], $row['merchant name'], $row['email'], $row['is approved']));
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function merchantDetails($userId){
         $packages = Package::all();
         $user = User::with('packages','businessInfo','paymentInfo','verificationInfo')->where('id',$userId)->first();

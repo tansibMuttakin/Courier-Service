@@ -144,4 +144,44 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('admin.order.index');
     }
+
+    public function exportCsv(){
+
+        $fileName = 'orders_table.csv';
+        $orders = Order::with(['user','store','deliveryInfo'])->get();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('order id', 'merchant id', 'type', 'store name', 'customer name', 'customer phone', 'amount'
+            , 'delivery status', 'payment status');
+
+        $callback = function() use($orders, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($orders as $order) {
+                $row['order id']  = $order->id;
+                $row['merchant id']    = $order->user->id;
+                $row['type']    = $order->product_type;
+                $row['store name']  = $order->store->store_name;
+                $row['customer name']  = $order->recipient_name;
+                $row['customer phone']  = $order->recipient_phone;
+                $row['amount']  = $order->deliveryInfo->cost_of_delivery;
+                $row['delivery status']  = $order->deliveryInfo->delivery_status;
+                $row['payment status']  = $order->deliveryInfo->payment_status;
+
+                fputcsv($file, array($row['order id'], $row['merchant id'], $row['type'], $row['store name'], $row['customer name']
+                ,$row['customer phone'],$row['amount'],$row['delivery status'],$row['payment status']));
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }

@@ -29,7 +29,7 @@
             </select>
         </div>
         <div>
-            <a href=""><button class="border" style="color:white;">Export CSV</button></a>
+            <a href="{{route('admin.merchant.csv')}}"><button class="border" style="color:white;">Export CSV</button></a>
         </div>
     </div>
 </div>

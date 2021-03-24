@@ -31,6 +31,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
     
     Route::get('/dashboard',[AdminController::class,'index'])->name('admin.dashboard');
     Route::get('/merchants',[AdminController::class,'users'])->name('admin.users');
+    Route::get('/merchants/csv',[AdminController::class,'exportCsv'])->name('admin.merchant.csv');
     Route::get('/update/approval/{userId}',[AdminController::class,'updateApproval'])->name('admin.updateApproval');
     Route::get('/merchant/details/{userId}',[AdminController::class,'merchantDetails'])->name('admin.merchantDetails');
     Route::post('/merchant/details/update/{userId}',[AdminController::class,'update'])->name('admin.merchant.update');
@@ -58,6 +59,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
     Route::get('/order/edit/{orderId}', 'App\Http\Controllers\Admin\OrderController@edit')->name('admin.order.edit');
     Route::post('/order/update/{orderId}', 'App\Http\Controllers\Admin\OrderController@update')->name('admin.order.update');
     Route::get('/order/delete/{orderId}', 'App\Http\Controllers\Admin\OrderController@destroy')->name('admin.order.destroy');
+    Route::get('/order/csv', 'App\Http\Controllers\Admin\OrderController@exportCsv')->name('admin.order.csv');
     
 
     
